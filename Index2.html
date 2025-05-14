@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Washouse - Encuesta de Satisfacción</title>
+  <link rel="icon" href="https://lh3.googleusercontent.com/d/1BzcMgCmwGdINMrYhIUtm6sgmrjfakaoC=s0" type="image/png" />
+  <!-- Librerías -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.0.2/TweenMax.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Winwheel.js/2.7.0/Winwheel.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root { --rosa:#ff9ff3; --morado:#9c88ff; --azul:#48dbfb; --blanco:#fff; --gris:#f0f0f5; }
+    * { box-sizing:border-box; }
+    body { font-family:'Poppins',sans-serif; margin:0; padding:0; background:var(--gris);
+           display:flex; justify-content:center; align-items:center; min-height:100vh; }
+    .btn { padding:12px 24px; background:var(--morado); color:var(--blanco); border:none;
+           border-radius:8px; cursor:pointer; font-weight:600; transition:background .3s;
+           margin-top:16px; }
+    .btn:hover { background:var(--azul); }
+    .screen { display:none; width:100%; max-width:500px; background:var(--blanco);
+              padding:32px; border-radius:12px; box-shadow:0 4px 20px rgba(0,0,0,0.1);
+              text-align:center; }
+    .screen.active { display:block; }
+    input, select, textarea { width:100%; margin:8px 0; padding:10px;
+                               border:1px solid #ccc; border-radius:6px; font-size:14px; }
+    textarea { resize:vertical; }
+    .question-content button { display:block; width:48px; margin:8px auto;
+                              background:var(--rosa); color:var(--blanco);
+                              border:none; border-radius:6px; cursor:pointer; }
+    #wheelCanvas { margin:24px auto; display:block; }
+    .logo { margin-bottom:16px; }
+    .logo img { max-width:150px; }
+  </style>
+</head>
+<body>
+  <!-- Pantallas -->
+  <div class="screen active" id="screen1">
+    <div class="logo"><img src="https://lh3.googleusercontent.com/d/1BzcMgCmwGdINMrYhIUtm6sgmrjfakaoC=s0" alt="Logo"></div>
+    <h1>¡Ayúdanos a mejorar Washouse!</h1>
+    <p>Responde 6 preguntas y participa en un sorteo.</p>
+    <button class="btn" onclick="showScreen('screen2')">Comenzar Encuesta</button>
+  </div>
+  <div class="screen" id="screen2">
+    <h2>Datos de contacto</h2>
+    <form onsubmit="event.preventDefault(); collectUserData();">
+      <input type="text" id="nombre" placeholder="Nombre*" required />
+      <input type="tel" id="telefono" placeholder="Teléfono (10 dígitos)*" pattern="[0-9]{10}" maxlength="10" inputmode="numeric" required />
+      <select id="tipoServicio" required>
+        <option value="">¿Qué servicio usas?</option>
+        <option value="autoservicio">Autoservicio</option>
+        <option value="encargo">Por Encargo</option>
+        <option value="domicilio">Domicilio</option>
+      </select>
+      <button class="btn" type="submit">Siguiente</button>
+    </form>
+    <p style="font-size:12px;color:#555;margin-top:10px;">
+      Tus respuestas son confidenciales y solo se usarán internamente para mejorar nuestro servicio.
+      No se compartirán con empleados ni terceros. Cumplimos con nuestra política de privacidad.
+    </p>
+  </div>
+  <!-- Preguntas -->
+  <div class="screen question-screen" id="question1">
+    <h3>1. ¿En una escala de 0 a 10, qué tan probable es que recomiendes Washouse?</h3>
+    <div id="choices1" class="question-content"></div>
+  </div>
+  <div class="screen question-screen" id="question2">
+    <h3>2. ¿Cuál fue la principal razón para darnos esa puntuación?</h3>
+    <textarea id="openReason" rows="3" placeholder="Tu opinión..."></textarea>
+    <button class="btn" onclick="nextQuestion()">Siguiente</button>
+  </div>
+  <div class="screen question-screen" id="question3">
+    <h3>3. ¿Qué podríamos mejorar para que tu experiencia sea aún mejor?</h3>
+    <textarea id="openImprove" rows="3" placeholder="Tus sugerencias..."></textarea>
+    <button class="btn" onclick="nextQuestion()">Siguiente</button>
+  </div>
+  <div class="screen question-screen" id="question4">
+    <h3>4. ¿Cómo calificarías la limpieza de nuestras instalaciones? (0-10)</h3>
+    <div id="choices4" class="question-content"></div>
+  </div>
+  <div class="screen question-screen" id="question5">
+    <h3>5. ¿Cómo calificarías la amabilidad de nuestro personal? (0-10)</h3>
+    <div id="choices5" class="question-content"></div>
+  </div>
+  <div class="screen question-screen" id="question6">
+    <h3>6. ¿Cómo calificarías la relación calidad-precio de nuestros servicios? (0-10)</h3>
+    <div id="choices6" class="question-content"></div>
+  </div>
+  <!-- Reseña -->
+  <div class="screen" id="screen9">
+    <h3>¿Te gustaría dejarnos una reseña en Google?</h3>
+    <button class="btn" onclick="acceptReview(true)">Sí</button>
+    <button class="btn" onclick="acceptReview(false)">No</button>
+  </div>
+  <div class="screen" id="screen10">
+    <h3>Escanea este QR para dejarnos reseña</h3>
+    <img src="https://lh3.googleusercontent.com/d/1-yberuOTaIsAnEeuUkFq8KAL2NbyOG1Q=s0" alt="QR" style="width:180px;margin:16px auto;display:block;" />
+    <button class="btn" style="margin:16px auto;display:block;" onclick="finishSurvey()">Finalizar</button>
+    <p style="font-size:12px;color:#555;">Si haces la encuesta desde tu celular, ingresa a <a href="https://n9.cl/r15mdd" target="_blank">n9.cl/r15mdd</a></p>
+  </div>
+  <!-- Sorteo -->
+  <div class="screen" id="screen11">
+    <h2>¡Participa en el sorteo!</h2>
+    <canvas id="wheelCanvas" width="300" height="300"></canvas>
+    <button class="btn" onclick="spinWheel()">Girar Ruleta</button>
+    <p id="winnerText"></p>
+  </div>
+
+  <script>
+    const user = { name:'', phone:'', service:'', responses:[], review:false };
+    const prizeCatalog = {
+      autoservicio: ['Lavadora 10kg gratis','Bolsa ecológica gratis','Doble sello cliente VIP'],
+      encargo: ['Edredón matrimonial gratis','Bolsa ecológica gratis','2 toallas grandes gratis'],
+      domicilio: ['Recolección gratis','Lavado express gratis','Bolsa ecológica gratis']
+    };
+    let currentQ=1, wheel, neutralPool=[];
+
+    function showScreen(id){ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
+    function collectUserData(){ user.name=document.getElementById('nombre').value; user.phone=document.getElementById('telefono').value; user.service=document.getElementById('tipoServicio').value; currentQ=1; renderChoices(1,'choices1'); }
+    function renderChoices(q,container){ const c=document.getElementById(container); c.innerHTML=''; for(let i=0;i<=10;i++){ const b=document.createElement('button'); b.textContent=i; b.onclick=()=>{ user.responses.push({question:q,score:i}); nextQuestion(); }; c.appendChild(b);} showScreen(`question${q}`);}    
+    function nextQuestion(){ currentQ++; if(currentQ===2||currentQ===3){ showScreen(`question${currentQ}`); } else if(currentQ>=4&&currentQ<=6){ renderChoices(currentQ,`choices${currentQ}`); } else { showScreen('screen9'); }}
+    function acceptReview(ans){ user.review=ans; ans? showScreen('screen10'): finishSurvey(); }
+    function finishSurvey(){ const ts=new Date().toISOString(); const first=user.responses.find(a=>a.question===1).score; const neutral=(first>=7&&first<=8); if(neutral&&user.review) neutralPool.push(user); const payload={Timestamp:ts,Nombre:user.name,Telefono:user.phone,TipoServicio:user.service,P1_NPS:first,P2_Razon:document.getElementById('openReason').value,P3_Sugerencias:document.getElementById('openImprove').value,P4_Limpieza:user.responses.find(a=>a.question===4).score,P5_Amabilidad:user.responses.find(a=>a.question===5).score,P6_CalidadPrecio:user.responses.find(a=>a.question===6).score,Solicito_Resena:user.review?'Sí':'No',Dejo_Resena:user.review?'Sí':'No',Es_Neutral:neutral?'Sí':'No',En_Sorteo:(neutral&&user.review)?'Sí':'No',Premio_Asignado:''};
+      fetch('https://script.google.com/macros/s/AKfycbwY_qRTB40yfg2eZ6yLDwKUWcUZwFVJDyFwBn6Bw3L6wUAfpMzRkuaktN4j2pVGPwe8/exec',{
+        method:'POST',mode:'cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)
+      }).then(()=>console.log('Guardado')).catch(e=>console.error(e));
+      showScreen('screen11'); initWheel(); }
+    function initWheel(){ if(typeof Winwheel==='undefined'){ console.error('Winwheel no cargado'); return;} const segs=prizeCatalog[user.service].map(p=>({text:p})); wheel=new Winwheel({canvasId:'wheelCanvas',numSegments:segs.length,segments:segs,animation:{type:'spinToStop',duration:5,spins:8,callbackFinished:()=>document.getElementById('winnerText').textContent='¡Felicidades! '+wheel.getIndicatedSegment().text}});}    
+    function spinWheel(){ if(wheel) wheel.startAnimation(); }
+  </script>
+</body>
+</html>
