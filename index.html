@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Washouse - Encuesta de Satisfacción</title>
   <link rel="icon" href="https://lh3.googleusercontent.com/d/1BzcMgCmwGdINMrYhIUtm6sgmrjfakaoC=s0" type="image/png" />
-  <!-- Ya no cargamos Winwheel -->
   <style>
     :root {
       --rosa: #ff9ff3;
@@ -15,9 +14,7 @@
       --gris: #f0f0f5;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       font-family: 'Poppins', sans-serif;
@@ -40,10 +37,7 @@
       transition: background 0.3s;
       margin-top: 16px;
     }
-
-    .btn:hover {
-      background: var(--azul);
-    }
+    .btn:hover { background: var(--azul); }
 
     .screen {
       display: none;
@@ -55,10 +49,7 @@
       box-shadow: 0 4px 20px rgba(0,0,0,0.1);
       text-align: center;
     }
-
-    .screen.active {
-      display: block;
-    }
+    .screen.active { display: block; }
 
     input, select, textarea {
       width: 100%;
@@ -68,10 +59,7 @@
       border-radius: 6px;
       font-size: 14px;
     }
-
-    textarea {
-      resize: vertical;
-    }
+    textarea { resize: vertical; }
 
     .question-content button {
       display: inline-block;
@@ -84,13 +72,8 @@
       cursor: pointer;
     }
 
-    .logo {
-      margin-bottom: 16px;
-    }
-
-    .logo img {
-      max-width: 150px;
-    }
+    .logo { margin-bottom: 16px; }
+    .logo img { max-width: 150px; }
 
     #winnerText {
       font-size: 18px;
@@ -101,7 +84,7 @@
       background: rgba(156, 136, 255, 0.1);
     }
 
-    /* --- ESTILOS PARA EL JUEGO DE CARTAS --- */
+    /* CARTAS */
     #cardsContainer {
       display: flex;
       justify-content: center;
@@ -149,13 +132,15 @@
       font-size: 14px;
       text-align: center;
     }
-    /* ----------------------------------------- */
+    /* FIN CARTAS */
   </style>
 </head>
 <body>
-  <!-- Pantallas -->
+  <!-- Pantallas de encuesta -->
   <div class="screen active" id="screen1">
-    <div class="logo"><img src="https://lh3.googleusercontent.com/d/1BzcMgCmwGdINMrYhIUtm6sgmrjfakaoC=s0" alt="Logo"></div>
+    <div class="logo">
+      <img src="https://lh3.googleusercontent.com/d/1BzcMgCmwGdINMrYhIUtm6sgmrjfakaoC=s0" alt="Logo">
+    </div>
     <h1>¡Ayúdanos a mejorar Washouse!</h1>
     <p>Responde 6 preguntas y participa en un sorteo.</p>
     <button class="btn" onclick="showScreen('screen2')">Comenzar Encuesta</button>
@@ -180,34 +165,29 @@
     </p>
   </div>
 
-  <!-- Preguntas -->
+  <!-- Preguntas 1–6 -->
   <div class="screen question-screen" id="question1">
     <h3>1. ¿En una escala de 0 a 10, qué tan probable es que recomiendes Washouse?</h3>
     <div id="choices1" class="question-content"></div>
   </div>
-  
   <div class="screen question-screen" id="question2">
     <h3>2. ¿Cuál fue la principal razón para darnos esa puntuación?</h3>
     <textarea id="openReason" rows="3" placeholder="Tu opinión..."></textarea>
     <button class="btn" onclick="nextQuestion()">Siguiente</button>
   </div>
-  
   <div class="screen question-screen" id="question3">
     <h3>3. ¿Qué podríamos mejorar para que tu experiencia sea aún mejor?</h3>
     <textarea id="openImprove" rows="3" placeholder="Tus sugerencias..."></textarea>
     <button class="btn" onclick="nextQuestion()">Siguiente</button>
   </div>
-  
   <div class="screen question-screen" id="question4">
     <h3>4. ¿Cómo calificarías la limpieza de nuestras instalaciones? (0-10)</h3>
     <div id="choices4" class="question-content"></div>
   </div>
-  
   <div class="screen question-screen" id="question5">
     <h3>5. ¿Cómo calificarías la amabilidad de nuestro personal? (0-10)</h3>
     <div id="choices5" class="question-content"></div>
   </div>
-  
   <div class="screen question-screen" id="question6">
     <h3>6. ¿Cómo calificarías la relación calidad-precio de nuestros servicios? (0-10)</h3>
     <div id="choices6" class="question-content"></div>
@@ -219,12 +199,13 @@
     <button class="btn" onclick="acceptReview(true)">Sí</button>
     <button class="btn" onclick="acceptReview(false)">No</button>
   </div>
-  
   <div class="screen" id="screen10">
     <h3>Escanea este QR para dejarnos reseña</h3>
     <img src="https://lh3.googleusercontent.com/d/1-yberuOTaIsAnEeuUkFq8KAL2NbyOG1Q=s0" alt="QR" style="width:180px;margin:16px auto;display:block;" />
-    <button class="btn" style="margin:16px auto;display:block;" onclick="finishSurvey()">Finalizar</button>
-    <p style="font-size:12px;color:#555;">Si haces la encuesta desde tu celular, ingresa a <a href="https://n9.cl/r15mdd" target="_blank">n9.cl/r15mdd</a></p>
+    <button class="btn" onclick="finishSurvey()">Finalizar</button>
+    <p style="font-size:12px;color:#555;">
+      Si haces la encuesta desde tu celular, ingresa a <a href="https://n9.cl/r15mdd" target="_blank">n9.cl/r15mdd</a>
+    </p>
   </div>
 
   <!-- Sorteo con cartas -->
@@ -256,29 +237,34 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      const user = { 
-        name: '', 
-        phone: '', 
-        service: '', 
-        responses: [], 
-        review: false 
-      };
-      
+      // Datos de usuario
+      const user = { name:'', phone:'', service:'', responses:[], review:false };
       const prizeCatalog = {
-        autoservicio: ['En tu proxima visita usa una lavadora y recibe una de 10kg gratis', 'En tu proximo servicio bolsa ecologica gratis', 'Doble sello en tu tarjera de cliente especial'],
-        encargo: ['Traenos un edredon o 6kg de ropa y te lavamos un edredon matrimonial gratis', 'En tu proximo servicio bolsa ecologica gratis', 'Traenos 6 kg y te lavamos 2 Toallas grandes gratis'],
-        domicilio: ['Mandanos 6kg de ropa y la recolección es gratis', 'Mandanos 6kg de ropa y te lavamos express gratis', 'En tu proximo servicio bolsa ecologica gratis']
+        autoservicio: [
+          'Usa una lavadora 10kg gratis',
+          'Bolsa ecológica gratis',
+          'Doble sello en tarjeta especial'
+        ],
+        encargo: [
+          'Lavado de edredón matrimonial gratis',
+          'Bolsa ecológica gratis',
+          'Lavado de 2 toallas grandes gratis'
+        ],
+        domicilio: [
+          'Recolección gratis (6kg)',
+          'Lavado express gratis (6kg)',
+          'Bolsa ecológica gratis'
+        ]
       };
-      
       let currentQ = 1;
 
-      // Mostrar pantalla
-      window.showScreen = (id) => {
+      // Navegación de pantallas
+      window.showScreen = id => {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
         document.getElementById(id).classList.add('active');
       };
 
-      // Recoger datos usuario
+      // Recoger datos iniciales
       window.collectUserData = () => {
         user.name = document.getElementById('nombre').value;
         user.phone = document.getElementById('telefono').value;
@@ -287,23 +273,23 @@
         renderChoices(1, 'choices1');
       };
 
-      // Renderizar opciones numéricas
-      const renderChoices = (q, container) => {
+      // Render de opciones 0–10
+      function renderChoices(q, container) {
         const c = document.getElementById(container);
         c.innerHTML = '';
         for (let i = 0; i <= 10; i++) {
           const btn = document.createElement('button');
           btn.textContent = i;
           btn.onclick = () => {
-            user.responses.push({ question: q, score: i });
+            user.responses.push({ question:q, score:i });
             nextQuestion();
           };
           c.appendChild(btn);
         }
         showScreen(`question${q}`);
-      };
+      }
 
-      // Siguiente pregunta
+      // Avanzar pregunta
       window.nextQuestion = () => {
         currentQ++;
         if (currentQ === 2 || currentQ === 3) {
@@ -315,84 +301,85 @@
         }
       };
 
-      // Manejar reseña
-      window.acceptReview = (ans) => {
+      // Reseña
+      window.acceptReview = ans => {
         user.review = ans;
         ans ? showScreen('screen10') : finishSurvey();
       };
 
       // Finalizar encuesta
-      window.finishSurvey = async () => {
+      window.finishSurvey = () => {
+        // Candado 30 días
+        const last = getCookie('lastSurvey');
+        if (last && Date.now() - last < 30*24*3600*1000) {
+          alert('Ya participaste en los últimos 30 días.');
+          return;
+        }
+        setCookie('lastSurvey', Date.now(), 30);
+
+        // Envío a Apps Script
         const payload = {
+          Accion: 'insertar',
           nombre: user.name,
           telefono: user.phone,
           tipoServicio: user.service,
-          p1_NPS: user.responses.find(a => a.question === 1)?.score || '',
+          p1_NPS: user.responses.find(a=>a.question===1)?.score || '',
           p2_Razon: document.getElementById('openReason').value,
           p3_Sugerencias: document.getElementById('openImprove').value,
-          p4_Limpieza: user.responses.find(a => a.question === 4)?.score || '',
-          p5_Amabilidad: user.responses.find(a => a.question === 5)?.score || '',
-          p6_CalidadPrecio: user.responses.find(a => a.question === 6)?.score || '',
-          solicito_Resena: user.review ? 'Sí' : 'No',
+          p4_Limpieza: user.responses.find(a=>a.question===4)?.score || '',
+          p5_Amabilidad: user.responses.find(a=>a.question===5)?.score || '',
+          p6_CalidadPrecio: user.responses.find(a=>a.question===6)?.score || '',
+          solicito_Resena: user.review?'Sí':'No',
           dejo_Resena: 'No',
-          es_Neutral: (user.responses[0]?.score >= 7 && user.responses[0]?.score <= 8) ? 'Sí' : 'No',
-          en_Sorteo: (user.responses[0]?.score >= 7 && user.responses[0]?.score <= 8 && user.review) ? 'Sí' : 'No',
+          es_Neutral: (user.responses[0]?.score>=7 && user.responses[0]?.score<=8)?'Sí':'No',
+          en_Sorteo: (user.responses[0]?.score>=7 && user.responses[0]?.score<=8 && user.review)?'Sí':'No',
           premio_Asignado: ''
         };
-
-        try {
-          await fetch('https://script.google.com/macros/s/AKfycbzjAD7TP7DF7o5dsCY8HwtQeIptiM_7WBFAdibxQUmT6Cgbns7sMagUazWhjkMVnPk3/exec', {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-          });
-          console.log("Datos guardados. Iniciando sorteo...");
-        } catch (error) {
-          console.error('Error:', error);
-          alert('No se pudo guardar, pero puedes participar en el sorteo.');
-        }
+        fetch('https://script.google.com/macros/s/AKfycbwyuNw00hpl7bXDmBSB4JVUaVCxtiQtwBs9edPoo5X7_BCGEH8GRGrY_6kphmqHnmEX/exec', {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
         showScreen('screen11');
       };
 
-      // Abrir carta y revelar
+      // Abrir carta
       window.openCard = () => {
         const btn = document.querySelector('.btn[onclick="openCard()"]');
         btn.disabled = true;
-
         const gana = Math.random() < 0.2;
         let texto = 'Lo sentimos, sigue participando la próxima vez.';
+        let premio = '';
         if (gana) {
-          const lista = prizeCatalog[user.service];
-          const premio = lista[Math.floor(Math.random() * lista.length)];
+          premio = prizeCatalog[user.service][Math.floor(Math.random()*3)];
           texto = `¡GANASTE!\n${premio}`;
-          actualizarPremio(premio);
-        }
-
-        const idx = Math.floor(Math.random() * 3);
-        const carta = document.querySelector(`.card[data-index="${idx}"]`);
-        carta.classList.add('flipped');
-        carta.querySelector('.card-back').textContent = texto;
-        document.getElementById('winnerText').innerText = '';
-      };
-
-      // Actualizar premio en Sheets (igual que antes)
-      const actualizarPremio = async (premio) => {
-        try {
-          await fetch('https://script.google.com/macros/s/AKfycbzjAD7TP7DF7o5dsCY8HwtQeIptiM_7WBFAdibxQUmT6Cgbns7sMagUazWhjkMVnPk3/exec', {
+          fetch('https://script.google.com/macros/s/AKfycbwyuNw00hpl7bXDmBSB4JVUaVCxtiQtwBs9edPoo5X7_BCGEH8GRGrY_6kphmqHnmEX/exec', {
             method: 'POST',
             mode: 'no-cors',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-              Telefono: user.phone,
-              Premio_Asignado: premio,
-              Accion: 'actualizar_premio'
+              Accion: 'actualizar_premio',
+              telefono: user.phone,
+              Premio_Asignado: premio
             })
           });
-        } catch (error) {
-          console.error('Error al guardar premio:', error);
         }
+        const idx = Math.floor(Math.random()*3);
+        const carta = document.querySelector(`.card[data-index="${idx}"]`);
+        carta.classList.add('flipped');
+        carta.querySelector('.card-back').textContent = texto;
       };
+
+      // Cookies
+      function setCookie(n,v,d){
+        const dt=new Date(); dt.setTime(dt.getTime()+d*24*3600*1000);
+        document.cookie = `${n}=${v};expires=${dt.toUTCString()};path=/`;
+      }
+      function getCookie(n){
+        const m=document.cookie.match(new RegExp('(^| )'+n+'=([^;]+)'));
+        return m?m[2]:null;
+      }
     });
   </script>
 </body>
