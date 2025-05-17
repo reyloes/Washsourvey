@@ -25,21 +25,15 @@
       padding: 12px 24px;
       background: var(--morado);
       color: var(--blanco);
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: 600;
-      transition: background 0.3s;
-      margin-top: 16px;
+      border: none; border-radius: 8px;
+      cursor: pointer; font-weight: 600;
+      transition: background 0.3s; margin-top: 16px;
     }
     .btn:hover { background: var(--azul); }
     .screen {
-      display: none;
-      width: 100%; max-width: 500px;
-      background: var(--blanco);
-      padding: 32px;
-      border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      display: none; width: 100%; max-width: 500px;
+      background: var(--blanco); padding: 32px;
+      border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);
       text-align: center;
     }
     .screen.active { display: block; }
@@ -74,31 +68,23 @@
     }
     .card-inner {
       width: 100%; height: 100%;
-      transition: transform 0.6s;
-      transform-style: preserve-3d;
+      transition: transform 0.6s; transform-style: preserve-3d;
       position: relative; cursor: pointer;
     }
     .card.flipped .card-inner {
       transform: rotateY(180deg);
     }
     .card-front, .card-back {
-      position: absolute;
-      width: 100%; height: 100%;
-      border-radius: 8px;
-      backface-visibility: hidden;
-      display: flex;
-      align-items: center; justify-content: center;
-      font-family: 'Poppins', sans-serif;
-      font-size: 24px;
+      position: absolute; width: 100%; height: 100%;
+      border-radius: 8px; backface-visibility: hidden;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Poppins', sans-serif; font-size: 24px;
     }
-    .card-front {
-      background: var(--morado); color: var(--blanco);
-    }
+    .card-front { background: var(--morado); color: var(--blanco); }
     .card-back {
       background: var(--gris); color: var(--morado);
-      transform: rotateY(180deg);
-      padding: 8px; box-sizing: border-box;
-      font-size: 14px; text-align: center;
+      transform: rotateY(180deg); padding: 8px;
+      box-sizing: border-box; font-size: 14px; text-align: center;
     }
     /* FIN CARTAS */
   </style>
@@ -111,7 +97,7 @@
     </div>
     <h1>¡Ayúdanos a mejorar Washouse!</h1>
     <p>Responde 6 preguntas y participa en un sorteo.</p>
-    <button class="btn" onclick="startSurvey()">Comenzar Encuesta</button>
+    <button class="btn" onclick="showScreen('screen2')">Comenzar Encuesta</button>
   </div>
 
   <!-- Pantalla 2: datos contacto -->
@@ -119,7 +105,7 @@
     <h2>Datos de contacto</h2>
     <form onsubmit="event.preventDefault(); collectUserData();">
       <input type="text" id="nombre" placeholder="Nombre*" required />
-      <input type="tel" id="telefono" placeholder="Teléfono (10 dígitos)*" pattern="[0-9]{10}" maxlength="10" inputmode="numeric" required />
+      <input type="tel" id="telefono" placeholder="Teléfono (10 dígitos)*" pattern="[0-9]{10}" maxlength="10" required />
       <select id="tipoServicio" required>
         <option value="">¿Qué servicio usas?</option>
         <option value="autoservicio">Autoservicio</option>
@@ -130,7 +116,7 @@
     </form>
     <p style="font-size:12px;color:#555;margin-top:10px;">
       Tus respuestas son confidenciales y solo se usarán internamente para mejorar nuestro servicio.<br>
-      No se compartirán con empleados ni terceros. Cumplimos con nuestra política de privacidad.
+      No se compartirán con empleados ni terceros.
     </p>
   </div>
 
@@ -169,39 +155,21 @@
     <button class="btn" onclick="acceptReview(false)">No</button>
   </div>
 
-  <!-- Pantalla 10: QR y finalizar encuesta -->
+  <!-- Pantalla 10: QR y finalizar (muestra sorteo) -->
   <div class="screen" id="screen10">
     <h3>Escanea este QR para dejarnos reseña</h3>
     <img src="https://lh3.googleusercontent.com/d/1-yberuOTaIsAnEeuUkFq8KAL2NbyOG1Q=s0"
          alt="QR" style="width:180px;margin:16px auto;display:block;" />
     <button class="btn" onclick="finishSurvey()">Finalizar</button>
-    <p style="font-size:12px;color:#555;">
-      Si haces la encuesta desde tu celular, ingresa a <a href="https://n9.cl/r15mdd" target="_blank">n9.cl/r15mdd</a>
-    </p>
   </div>
 
   <!-- Pantalla 11: sorteo con cartas -->
   <div class="screen" id="screen11">
     <h2>¡Participa en el sorteo!</h2>
     <div id="cardsContainer">
-      <div class="card" data-index="0">
-        <div class="card-inner">
-          <div class="card-front">❓</div>
-          <div class="card-back"></div>
-        </div>
-      </div>
-      <div class="card" data-index="1">
-        <div class="card-inner">
-          <div class="card-front">❓</div>
-          <div class="card-back"></div>
-        </div>
-      </div>
-      <div class="card" data-index="2">
-        <div class="card-inner">
-          <div class="card-front">❓</div>
-          <div class="card-back"></div>
-        </div>
-      </div>
+      <div class="card" data-index="0"><div class="card-inner"><div class="card-front">❓</div><div class="card-back"></div></div></div>
+      <div class="card" data-index="1"><div class="card-inner"><div class="card-front">❓</div><div class="card-back"></div></div></div>
+      <div class="card" data-index="2"><div class="card-inner"><div class="card-front">❓</div><div class="card-back"></div></div></div>
     </div>
     <button class="btn" onclick="openCard()">Abrir Premio</button>
     <p id="winnerText"></p>
@@ -212,7 +180,7 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      // Datos del usuario
+      const WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbxSwZxBdczPhk06FmyaAgBkSZeG-t7GXBcOgPqjAYOY1KRQsejcffUdTcOoZUq9RqTE/exec';
       const user = { name:'', phone:'', service:'', responses:[], review:false };
       const prizeCatalog = {
         autoservicio: [
@@ -233,34 +201,36 @@
       };
       let currentQ = 1;
 
-      // URL de tu Web App
-      const WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbyhtnDk-4zEo6QASr-kXCW98wOrQwviZhfQ_qoIA_qIekv38qFJ3DyJpk3LrowiBPgE/exec';
-
-      // Mostrar pantalla
       window.showScreen = id => {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
         document.getElementById(id).classList.add('active');
       };
 
-      // Iniciar encuesta con validación de cookie
-      window.startSurvey = () => {
-        const last = getCookie('lastSurvey');
-        if (last && (Date.now() - last) < 30*24*3600*1000) {
-          return alert('Ya participaste en los últimos 30 días. ¡Gracias por tu feedback!');
+      window.collectUserData = async () => {
+        const name = document.getElementById('nombre').value.trim();
+        const phone = document.getElementById('telefono').value.trim();
+        const service = document.getElementById('tipoServicio').value;
+        if (!name || !phone || !service) {
+          return alert('Completa todos los campos.');
         }
-        showScreen('screen2');
-      };
-
-      // Recoger datos de contacto
-      window.collectUserData = () => {
-        user.name = document.getElementById('nombre').value;
-        user.phone = document.getElementById('telefono').value;
-        user.service = document.getElementById('tipoServicio').value;
+        // validación 30 días en Sheet
+        const resp = await fetch(`${WEBAPP_URL}?Accion=check_last&telefono=${phone}`);
+        const j = await resp.json();
+        if (j.result === 'ok') {
+          const last = new Date(j.last);
+          const days = (Date.now() - last.getTime()) / (1000*60*60*24);
+          if (days < 30) {
+            return alert(`Ya hiciste una encuesta hace ${Math.floor(days)} días.\nVuelve a intentarlo en ${Math.ceil(30-days)} días.`);
+          }
+        }
+        // guardar data y avanzar
+        user.name = name;
+        user.phone = phone;
+        user.service = service;
         currentQ = 1;
         renderChoices(1, 'choices1');
       };
 
-      // Render opciones 0–10
       function renderChoices(q, container) {
         const c = document.getElementById(container);
         c.innerHTML = '';
@@ -276,7 +246,6 @@
         showScreen(`question${q}`);
       }
 
-      // Siguiente pregunta
       window.nextQuestion = () => {
         currentQ++;
         if (currentQ === 2 || currentQ === 3) {
@@ -288,18 +257,15 @@
         }
       };
 
-      // Manejo de reseña
       window.acceptReview = ans => {
         user.review = ans;
         ans ? showScreen('screen10') : finishSurvey();
       };
 
-      // Finalizar encuesta (solo muestra el sorteo)
       window.finishSurvey = () => {
         showScreen('screen11');
       };
 
-      // Abrir carta y revelar premio
       window.openCard = () => {
         const btn = document.querySelector('.btn[onclick="openCard()"]');
         btn.disabled = true;
@@ -310,7 +276,6 @@
           const premio = lista[Math.floor(Math.random()*lista.length)];
           texto = `¡GANASTE!\n${premio}`;
         }
-        // mostrar texto en carta
         const idx = Math.floor(Math.random()*3);
         const carta = document.querySelector(`.card[data-index="${idx}"]`);
         carta.classList.add('flipped');
@@ -318,57 +283,34 @@
         document.getElementById('btnSubmitPrize').style.display = 'inline-block';
       };
 
-      // Enviar encuesta + premio al final
       window.submitWithPrize = () => {
-        // bloquear botones
         document.querySelectorAll('button').forEach(b => b.disabled = true);
-        // set cookie ahora que finaliza
-        setCookie('lastSurvey', Date.now(), 30);
-        // obtenemos el texto de la carta y determinamos si ganó
         const textoCarta = document.querySelector('.card.flipped .card-back').textContent || '';
-        const esGanador  = textoCarta.startsWith('¡GANASTE!');
-        // armar payload
-        
+        const esG = textoCarta.startsWith('¡GANASTE!');
         const payload = {
           Accion: 'insertar',
-          nombre:           user.name,
-          telefono:         user.phone,
-          tipoServicio:     user.service,
-          p1_NPS:           user.responses.find(a=>a.question===1)?.score||'',
-          p2_Razon:         document.getElementById('openReason').value,
-          p3_Sugerencias:   document.getElementById('openImprove').value,
-          p4_Limpieza:      user.responses.find(a=>a.question===4)?.score||'',
-          p5_Amabilidad:    user.responses.find(a=>a.question===5)?.score||'',
+          nombre: user.name, telefono: user.phone, tipoServicio: user.service,
+          p1_NPS: user.responses.find(a=>a.question===1)?.score||'',
+          p2_Razon: document.getElementById('openReason').value,
+          p3_Sugerencias: document.getElementById('openImprove').value,
+          p4_Limpieza: user.responses.find(a=>a.question===4)?.score||'',
+          p5_Amabilidad: user.responses.find(a=>a.question===5)?.score||'',
           p6_CalidadPrecio: user.responses.find(a=>a.question===6)?.score||'',
-          solicito_Resena:  user.review?'Sí':'No',
-          dejo_Resena:      'No',
-          es_Neutral:       (user.responses[0]?.score>=7 && user.responses[0]?.score<=8)?'Sí':'No',
-          en_Sorteo:        (user.responses[0]?.score>=7 && user.responses[0]?.score<=8 && user.review)?'Sí':'No',
+          solicito_Resena: user.review?'Sí':'No',
+          dejo_Resena: 'No',
+          es_Neutral: (user.responses[0]?.score>=7 && user.responses[0]?.score<=8)?'Sí':'No',
+          en_Sorteo: (user.responses[0]?.score>=7 && user.responses[0]?.score<=8 && user.review)?'Sí':'No'
         };
-        // Sólo si efectivamente ganó, lo añadimos
-        if (esGanador) {
+        if (esG) {
           payload.premio_Asignado = textoCarta;
-          payload.fecha_premio = new Date().toISOString(); 
-        }  
-
+          payload.fecha_premio = new Date().toISOString();
+        }
         fetch(WEBAPP_URL, {
-          method: 'POST',
-          mode:   'no-cors',
-          headers:{ 'Content-Type':'application/json' },
-          body:   JSON.stringify(payload)
+          method:'POST', mode:'no-cors',
+          headers:{'Content-Type':'application/json'},
+          body:JSON.stringify(payload)
         });
       };
-
-      // Utilerías de cookie
-      function setCookie(name, value, days) {
-        const d = new Date();
-        d.setTime(d.getTime() + days*24*60*60*1000);
-        document.cookie = `${name}=${value};expires=${d.toUTCString()};path=/`;
-      }
-      function getCookie(name) {
-        const m = document.cookie.match(new RegExp('(^| )'+name+'=([^;]+)'));
-        return m ? m[2] : null;
-      }
     });
   </script>
 </body>
