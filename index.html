@@ -304,7 +304,7 @@
         const btn = document.querySelector('.btn[onclick="openCard()"]');
         btn.disabled = true;
         const gana = Math.random() < 0.5;
-        let texto = 'Lo sentimos, sigue participando la próxima vez.';
+        let texto = 'Lo sentimos, sigue participando.';
         if (gana) {
           const lista = prizeCatalog[user.service];
           const premio = lista[Math.floor(Math.random()*lista.length)];
