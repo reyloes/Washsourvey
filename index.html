@@ -13,19 +13,14 @@
       --blanco: #fff;
       --gris: #f0f0f5;
     }
-
     * { box-sizing: border-box; }
-
     body {
       font-family: 'Poppins', sans-serif;
-      margin: 0;
-      padding: 20px;
+      margin: 0; padding: 20px;
       background: var(--gris);
-      display: flex;
-      justify-content: center;
+      display: flex; justify-content: center;
       min-height: 100vh;
     }
-
     .btn {
       padding: 12px 24px;
       background: var(--morado);
@@ -38,11 +33,9 @@
       margin-top: 16px;
     }
     .btn:hover { background: var(--azul); }
-
     .screen {
       display: none;
-      width: 100%;
-      max-width: 500px;
+      width: 100%; max-width: 500px;
       background: var(--blanco);
       padding: 32px;
       border-radius: 12px;
@@ -50,102 +43,78 @@
       text-align: center;
     }
     .screen.active { display: block; }
-
     input, select, textarea {
-      width: 100%;
-      margin: 8px 0;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 14px;
+      width: 100%; margin: 8px 0;
+      padding: 10px; border: 1px solid #ccc;
+      border-radius: 6px; font-size: 14px;
     }
     textarea { resize: vertical; }
-
     .question-content button {
-      display: inline-block;
-      width: 48px;
-      margin: 8px 4px;
-      background: var(--rosa);
-      color: var(--blanco);
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
+      display: inline-block; width: 48px;
+      margin: 8px 4px; background: var(--rosa);
+      color: var(--blanco); border: none;
+      border-radius: 6px; cursor: pointer;
     }
-
     .logo { margin-bottom: 16px; }
     .logo img { max-width: 150px; }
-
     #winnerText {
-      font-size: 18px;
-      color: var(--morado);
-      margin-top: 20px;
-      padding: 10px;
+      font-size: 18px; color: var(--morado);
+      margin-top: 20px; padding: 10px;
       border-radius: 8px;
       background: rgba(156, 136, 255, 0.1);
     }
-
     /* CARTAS */
     #cardsContainer {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      margin: 20px 0;
+      display: flex; justify-content: center;
+      gap: 20px; margin: 20px 0;
     }
     .card {
-      width: 100px;
-      height: 140px;
+      width: 100px; height: 140px;
       perspective: 600px;
     }
     .card-inner {
-      width: 100%;
-      height: 100%;
+      width: 100%; height: 100%;
       transition: transform 0.6s;
       transform-style: preserve-3d;
-      position: relative;
-      cursor: pointer;
+      position: relative; cursor: pointer;
     }
     .card.flipped .card-inner {
       transform: rotateY(180deg);
     }
     .card-front, .card-back {
       position: absolute;
-      width: 100%;
-      height: 100%;
+      width: 100%; height: 100%;
       border-radius: 8px;
       backface-visibility: hidden;
       display: flex;
-      align-items: center;
-      justify-content: center;
+      align-items: center; justify-content: center;
       font-family: 'Poppins', sans-serif;
       font-size: 24px;
     }
     .card-front {
-      background: var(--morado);
-      color: var(--blanco);
+      background: var(--morado); color: var(--blanco);
     }
     .card-back {
-      background: var(--gris);
-      color: var(--morado);
+      background: var(--gris); color: var(--morado);
       transform: rotateY(180deg);
-      padding: 8px;
-      box-sizing: border-box;
-      font-size: 14px;
-      text-align: center;
+      padding: 8px; box-sizing: border-box;
+      font-size: 14px; text-align: center;
     }
     /* FIN CARTAS */
   </style>
 </head>
 <body>
-  <!-- Pantallas de encuesta -->
+  <!-- Pantalla 1: inicio -->
   <div class="screen active" id="screen1">
     <div class="logo">
       <img src="https://lh3.googleusercontent.com/d/1BzcMgCmwGdINMrYhIUtm6sgmrjfakaoC=s0" alt="Logo">
     </div>
     <h1>¡Ayúdanos a mejorar Washouse!</h1>
     <p>Responde 6 preguntas y participa en un sorteo.</p>
-    <button class="btn" onclick="showScreen('screen2')">Comenzar Encuesta</button>
+    <button class="btn" onclick="startSurvey()">Comenzar Encuesta</button>
   </div>
 
+  <!-- Pantalla 2: datos contacto -->
   <div class="screen" id="screen2">
     <h2>Datos de contacto</h2>
     <form onsubmit="event.preventDefault(); collectUserData();">
@@ -193,22 +162,25 @@
     <div id="choices6" class="question-content"></div>
   </div>
 
-  <!-- Reseña -->
+  <!-- Pantalla 9: reseña -->
   <div class="screen" id="screen9">
     <h3>¿Te gustaría dejarnos una reseña en Google?</h3>
     <button class="btn" onclick="acceptReview(true)">Sí</button>
     <button class="btn" onclick="acceptReview(false)">No</button>
   </div>
+
+  <!-- Pantalla 10: QR y finalizar encuesta -->
   <div class="screen" id="screen10">
     <h3>Escanea este QR para dejarnos reseña</h3>
-    <img src="https://lh3.googleusercontent.com/d/1-yberuOTaIsAnEeuUkFq8KAL2NbyOG1Q=s0" alt="QR" style="width:180px;margin:16px auto;display:block;" />
+    <img src="https://lh3.googleusercontent.com/d/1-yberuOTaIsAnEeuUkFq8KAL2NbyOG1Q=s0"
+         alt="QR" style="width:180px;margin:16px auto;display:block;" />
     <button class="btn" onclick="finishSurvey()">Finalizar</button>
     <p style="font-size:12px;color:#555;">
       Si haces la encuesta desde tu celular, ingresa a <a href="https://n9.cl/r15mdd" target="_blank">n9.cl/r15mdd</a>
     </p>
   </div>
 
-  <!-- Sorteo con cartas -->
+  <!-- Pantalla 11: sorteo con cartas -->
   <div class="screen" id="screen11">
     <h2>¡Participa en el sorteo!</h2>
     <div id="cardsContainer">
@@ -233,38 +205,53 @@
     </div>
     <button class="btn" onclick="openCard()">Abrir Premio</button>
     <p id="winnerText"></p>
+    <button class="btn" id="btnSubmitPrize" style="display:none;" onclick="submitWithPrize()">
+      Finalizar y Guardar Premio
+    </button>
   </div>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      // Datos de usuario
+      // Datos del usuario
       const user = { name:'', phone:'', service:'', responses:[], review:false };
       const prizeCatalog = {
         autoservicio: [
-          'Usa una lavadora 10kg gratis',
-          'Bolsa ecológica gratis',
-          'Doble sello en tarjeta especial'
+          '¡2x1 en un ciclo de lavadora de 10 kg en tu próximo servicio!',
+          '¡Bolsa ecológica de regalo en tu próximo servicio!',
+          '¡Dosis de jabón o suavizante gratis en tu próximo servicio!'
         ],
         encargo: [
-          'Lavado de edredón matrimonial gratis',
-          'Bolsa ecológica gratis',
-          'Lavado de 2 toallas grandes gratis'
+          '¡2x1 en lavado de edredón matrimonial en tu próximo servicio!',
+          '¡Bolsa ecológica de regalo en tu próximo servicio!',
+          '¡3 kg de lavado gratis en tu próximo servicio! (mínimo 6 kg)'
         ],
         domicilio: [
-          'Recolección gratis (6kg)',
-          'Lavado express gratis (6kg)',
-          'Bolsa ecológica gratis'
+          '¡2x1 en lavado de edredón matrimonial en tu próximo servicio!',
+          '¡Bolsa ecológica de regalo en tu próximo servicio!',
+          '¡3 kg de lavado gratis en tu próximo servicio! (mínimo 6 kg)'
         ]
       };
       let currentQ = 1;
 
-      // Navegación de pantallas
+      // URL de tu Web App
+      const WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbyhtnDk-4zEo6QASr-kXCW98wOrQwviZhfQ_qoIA_qIekv38qFJ3DyJpk3LrowiBPgE/exec';
+
+      // Mostrar pantalla
       window.showScreen = id => {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
         document.getElementById(id).classList.add('active');
       };
 
-      // Recoger datos iniciales
+      // Iniciar encuesta con validación de cookie
+      window.startSurvey = () => {
+        const last = getCookie('lastSurvey');
+        if (last && (Date.now() - last) < 30*24*3600*1000) {
+          return alert('Ya participaste en los últimos 30 días. ¡Gracias por tu feedback!');
+        }
+        showScreen('screen2');
+      };
+
+      // Recoger datos de contacto
       window.collectUserData = () => {
         user.name = document.getElementById('nombre').value;
         user.phone = document.getElementById('telefono').value;
@@ -273,7 +260,7 @@
         renderChoices(1, 'choices1');
       };
 
-      // Render de opciones 0–10
+      // Render opciones 0–10
       function renderChoices(q, container) {
         const c = document.getElementById(container);
         c.innerHTML = '';
@@ -289,7 +276,7 @@
         showScreen(`question${q}`);
       }
 
-      // Avanzar pregunta
+      // Siguiente pregunta
       window.nextQuestion = () => {
         currentQ++;
         if (currentQ === 2 || currentQ === 3) {
@@ -301,84 +288,86 @@
         }
       };
 
-      // Reseña
+      // Manejo de reseña
       window.acceptReview = ans => {
         user.review = ans;
         ans ? showScreen('screen10') : finishSurvey();
       };
 
-      // Finalizar encuesta
+      // Finalizar encuesta (solo muestra el sorteo)
       window.finishSurvey = () => {
-        // Candado 30 días
-        const last = getCookie('lastSurvey');
-        if (last && Date.now() - last < 30*24*3600*1000) {
-          alert('Ya participaste en los últimos 30 días.');
-          return;
-        }
-        setCookie('lastSurvey', Date.now(), 30);
-
-        // Envío a Apps Script
-        const payload = {
-          Accion: 'insertar',
-          nombre: user.name,
-          telefono: user.phone,
-          tipoServicio: user.service,
-          p1_NPS: user.responses.find(a=>a.question===1)?.score || '',
-          p2_Razon: document.getElementById('openReason').value,
-          p3_Sugerencias: document.getElementById('openImprove').value,
-          p4_Limpieza: user.responses.find(a=>a.question===4)?.score || '',
-          p5_Amabilidad: user.responses.find(a=>a.question===5)?.score || '',
-          p6_CalidadPrecio: user.responses.find(a=>a.question===6)?.score || '',
-          solicito_Resena: user.review?'Sí':'No',
-          dejo_Resena: 'No',
-          es_Neutral: (user.responses[0]?.score>=7 && user.responses[0]?.score<=8)?'Sí':'No',
-          en_Sorteo: (user.responses[0]?.score>=7 && user.responses[0]?.score<=8 && user.review)?'Sí':'No',
-          premio_Asignado: ''
-        };
-        fetch('https://script.google.com/macros/s/AKfycbwyuNw00hpl7bXDmBSB4JVUaVCxtiQtwBs9edPoo5X7_BCGEH8GRGrY_6kphmqHnmEX/exec', {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
         showScreen('screen11');
       };
 
-      // Abrir carta
+      // Abrir carta y revelar premio
       window.openCard = () => {
         const btn = document.querySelector('.btn[onclick="openCard()"]');
         btn.disabled = true;
-        const gana = Math.random() < 0.2;
+        const gana = Math.random() < 0.5;
         let texto = 'Lo sentimos, sigue participando la próxima vez.';
-        let premio = '';
         if (gana) {
-          premio = prizeCatalog[user.service][Math.floor(Math.random()*3)];
+          const lista = prizeCatalog[user.service];
+          const premio = lista[Math.floor(Math.random()*lista.length)];
           texto = `¡GANASTE!\n${premio}`;
-          fetch('https://script.google.com/macros/s/AKfycbwyuNw00hpl7bXDmBSB4JVUaVCxtiQtwBs9edPoo5X7_BCGEH8GRGrY_6kphmqHnmEX/exec', {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              Accion: 'actualizar_premio',
-              telefono: user.phone,
-              Premio_Asignado: premio
-            })
-          });
         }
+        // mostrar texto en carta
         const idx = Math.floor(Math.random()*3);
         const carta = document.querySelector(`.card[data-index="${idx}"]`);
         carta.classList.add('flipped');
         carta.querySelector('.card-back').textContent = texto;
+        document.getElementById('btnSubmitPrize').style.display = 'inline-block';
       };
 
-      // Cookies
-      function setCookie(n,v,d){
-        const dt=new Date(); dt.setTime(dt.getTime()+d*24*3600*1000);
-        document.cookie = `${n}=${v};expires=${dt.toUTCString()};path=/`;
+      // Enviar encuesta + premio al final
+      window.submitWithPrize = () => {
+        // bloquear botones
+        document.querySelectorAll('button').forEach(b => b.disabled = true);
+        // set cookie ahora que finaliza
+        setCookie('lastSurvey', Date.now(), 30);
+        // obtenemos el texto de la carta y determinamos si ganó
+        const textoCarta = document.querySelector('.card.flipped .card-back').textContent || '';
+        const esGanador  = textoCarta.startsWith('¡GANASTE!');
+        // armar payload
+        
+        const payload = {
+          Accion: 'insertar',
+          nombre:           user.name,
+          telefono:         user.phone,
+          tipoServicio:     user.service,
+          p1_NPS:           user.responses.find(a=>a.question===1)?.score||'',
+          p2_Razon:         document.getElementById('openReason').value,
+          p3_Sugerencias:   document.getElementById('openImprove').value,
+          p4_Limpieza:      user.responses.find(a=>a.question===4)?.score||'',
+          p5_Amabilidad:    user.responses.find(a=>a.question===5)?.score||'',
+          p6_CalidadPrecio: user.responses.find(a=>a.question===6)?.score||'',
+          solicito_Resena:  user.review?'Sí':'No',
+          dejo_Resena:      'No',
+          es_Neutral:       (user.responses[0]?.score>=7 && user.responses[0]?.score<=8)?'Sí':'No',
+          en_Sorteo:        (user.responses[0]?.score>=7 && user.responses[0]?.score<=8 && user.review)?'Sí':'No',
+        };
+        // Sólo si efectivamente ganó, lo añadimos
+        if (esGanador) {
+          payload.premio_Asignado = textoCarta;
+          payload.fecha_premio = new Date().toISOString(); 
+        }  
+
+        fetch(WEBAPP_URL, {
+          method: 'POST',
+          mode:   'no-cors',
+          headers:{ 'Content-Type':'application/json' },
+          body:   JSON.stringify(payload)
+        });
+      };
+
+      // Utilerías de cookie
+      function setCookie(name, value, days) {
+        const d = new Date();
+        d.setTime(d.getTime() + days*24*60*60*1000);
+        document.cookie = `${name}=${value};expires=${d.toUTCString()};path=/`;
       }
-      function getCookie(n){
-        const m=document.cookie.match(new RegExp('(^| )'+n+'=([^;]+)'));
-        return m?m[2]:null;
+      function getCookie(name) {
+        const m = document.cookie.match(new RegExp('(^| )'+name+'=([^;]+)'));
+        return m ? m[2] : null;
       }
     });
   </script>

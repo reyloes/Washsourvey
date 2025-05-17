@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF‑8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Back‑Office Washouse</title>
+  <style>
+    body { font-family:Poppins,sans-serif; padding:20px; background:#f0f0f5; }
+    input, button { padding:8px; margin:8px 0; font-size:16px; }
+    #info { margin-top:16px; }
+  </style>
+</head>
+<body>
+  <h1>Back‑Office: Gestión de Premios</h1>
+
+  <label>Teléfono del cliente:</label><br>
+  <input type="text" id="phone" placeholder="722xxxxxxx" maxlength="10" />
+  <button onclick="buscar()">Buscar Premio</button>
+
+  <div id="info"></div>
+
+  <script>
+    const WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbyhtnDk-4zEo6QASr-kXCW98wOrQwviZhfQ_qoIA_qIekv38qFJ3DyJpk3LrowiBPgE/exec';
+
+    async function buscar() {
+      const tel = document.getElementById('phone').value.trim();
+      if (!tel) return alert('Ingresa un teléfono');  
+      const resp = await fetch(`${WEBAPP_URL}?Accion=check_premio&telefono=${tel}`);
+      const j = await resp.json();
+      const info = document.getElementById('info');
+
+      if (j.result === 'no_pending') {
+        // Coincide con lo que devuelve doGet cuando no hay premios pendientes
+        info.innerHTML = '<p>No hay premio asignado o aún no ganó.</p>';
+      }
+      else if (j.result === 'ok') {
+        // Mostrar estado
+        let html = `<p><strong>Premio:</strong> ${j.premio}</p>
+                    <p><strong>Fecha premio:</strong> ${j.fechaP}</p>`;
+        if (j.cobrado) {
+          html += `<p style="color:green;"><strong>Ya cobrado el:</strong> ${j.cobrado}</p>`;
+        } else {
+          html += `<button onclick="cobrar(${j.row})">Marcar como cobrado</button>`;
+        }
+        info.innerHTML = html;
+      }
+      else {
+        // Cualquier otro resultado
+        info.innerHTML = '<p>Error, intenta de nuevo.</p>';
+      }
+    }
+
+    async function cobrar(row) {
+      const resp = await fetch(`${WEBAPP_URL}?Accion=cobrar_premio&row=${row}`);
+      const j = await resp.json();
+      if (j.result === 'cobrado') {
+        alert('Premio marcado como cobrado.');
+        buscar(); // refresca el estado
+      } else {
+        alert('Error al marcar cobrado.');
+      }
+    }
+  </script>
+</body>
+</html>
