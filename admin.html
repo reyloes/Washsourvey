@@ -2,51 +2,145 @@
 <html lang="es">
 <head>
   <meta charset="UTF‑8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Back‑Office Washouse</title>
   <style>
-    body { font-family:Poppins,sans-serif; padding:20px; background:#f0f0f5; }
-    input, button { padding:8px; margin:8px 0; font-size:16px; }
-    #info { margin-top:16px; }
+    :root {
+      --rosa: #ff9ff3;
+      --morado: #9c88ff;
+      --azul: #48dbfb;
+      --blanco: #fff;
+      --gris: #f0f0f5;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--gris);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+    }
+
+    .container {
+      background-color: var(--blanco);
+      margin-top: 40px;
+      padding: 30px 40px;
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      width: 90%;
+      max-width: 500px;
+    }
+
+    h1 {
+      color: var(--morado);
+      font-size: 1.6rem;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    label {
+      font-weight: 600;
+      color: #333;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      border: 2px solid var(--gris);
+      border-radius: 8px;
+      font-size: 16px;
+      box-sizing: border-box;
+      margin-top: 5px;
+      margin-bottom: 15px;
+    }
+
+    button {
+      background-color: var(--morado);
+      color: var(--blanco);
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #7e70e0;
+    }
+
+    .result {
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 10px;
+      background-color: var(--gris);
+      color: #333;
+    }
+
+    .success {
+      background-color: #d4edda;
+      color: #155724;
+    }
+
+    .error {
+      background-color: #f8d7da;
+      color: #721c24;
+    }
+
+    .info {
+      background-color: #d1ecf1;
+      color: #0c5460;
+    }
   </style>
 </head>
 <body>
-  <h1>Back‑Office: Gestión de Premios</h1>
+  <div class="container">
+    <h1>Back‑Office: Gestión de Premios</h1>
 
-  <label>Teléfono del cliente:</label><br>
-  <input type="text" id="phone" placeholder="722xxxxxxx" maxlength="10" />
-  <button onclick="buscar()">Buscar Premio</button>
+    <label for="phone">Teléfono del cliente:</label>
+    <input type="text" id="phone" placeholder="722xxxxxxx" maxlength="10" />
+    <button onclick="buscar()">Buscar Premio</button>
 
-  <div id="info"></div>
+    <div id="info" class="result"></div>
+  </div>
 
   <script>
     const WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbxSwZxBdczPhk06FmyaAgBkSZeG-t7GXBcOgPqjAYOY1KRQsejcffUdTcOoZUq9RqTE/exec';
 
     async function buscar() {
       const tel = document.getElementById('phone').value.trim();
-      if (!tel) return alert('Ingresa un teléfono');  
+      const info = document.getElementById('info');
+      info.innerHTML = '';
+      info.className = 'result';
+
+      if (!tel) {
+        info.innerHTML = 'Ingresa un teléfono';
+        info.classList.add('error');
+        return;
+      }
+
       const resp = await fetch(`${WEBAPP_URL}?Accion=check_premio&telefono=${tel}`);
       const j = await resp.json();
-      const info = document.getElementById('info');
 
       if (j.result === 'no_pending') {
-        // Coincide con lo que devuelve doGet cuando no hay premios pendientes
-        info.innerHTML = '<p>No hay premio asignado o aún no ganó.</p>';
-      }
-      else if (j.result === 'ok') {
-        // Mostrar estado
+        info.innerHTML = 'No hay premio asignado o aún no ganó.';
+        info.classList.add('info');
+      } else if (j.result === 'ok') {
         let html = `<p><strong>Premio:</strong> ${j.premio}</p>
                     <p><strong>Fecha premio:</strong> ${j.fechaP}</p>`;
         if (j.cobrado) {
-          html += `<p style="color:green;"><strong>Ya cobrado el:</strong> ${j.cobrado}</p>`;
+          html += `<p><strong style="color:green;">Ya cobrado el:</strong> ${j.cobrado}</p>`;
         } else {
           html += `<button onclick="cobrar(${j.row})">Marcar como cobrado</button>`;
         }
         info.innerHTML = html;
-      }
-      else {
-        // Cualquier otro resultado
-        info.innerHTML = '<p>Error, intenta de nuevo.</p>';
+        info.classList.add('success');
+      } else {
+        info.innerHTML = 'Error, intenta de nuevo.';
+        info.classList.add('error');
       }
     }
 
@@ -57,7 +151,7 @@
         alert('Premio marcado como cobrado.');
         buscar(); // refresca el estado
       } else {
-        alert('Error al marcar cobrado.');
+        alert('Error al marcar como cobrado.');
       }
     }
   </script>
