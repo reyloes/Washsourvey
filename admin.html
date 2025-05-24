@@ -17,32 +17,56 @@
       font-family: 'Poppins', sans-serif;
       background-color: var(--gris);
       margin: 0;
-      padding: 0;
+      padding: 20px 0;
       display: flex;
       justify-content: center;
-      align-items: flex-start;
-      min-height: 100vh;
     }
 
     .container {
-      background-color: var(--blanco);
-      margin-top: 40px;
-      padding: 30px 40px;
-      border-radius: 15px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
       width: 90%;
-      max-width: 500px;
+      max-width: 1000px;
+      background-color: var(--blanco);
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      overflow: hidden;
     }
 
-    h1 {
-      color: var(--morado);
-      font-size: 1.6rem;
-      margin-bottom: 20px;
+    .header {
+      background-color: var(--morado);
+      color: var(--blanco);
       text-align: center;
+      padding: 16px;
+      font-size: 1.5rem;
+    }
+
+    .content {
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    .left-panel, .right-panel {
+      box-sizing: border-box;
+      padding: 20px;
+    }
+
+    .left-panel {
+      flex: 1 1 300px;
+      border-right: 1px solid #e0e0e0;
+    }
+
+    .right-panel {
+      flex: 2 1 600px;
+    }
+
+    h2 {
+      margin-top: 0;
+      color: var(--morado);
     }
 
     label {
       font-weight: 600;
+      display: block;
+      margin-bottom: 8px;
       color: #333;
     }
 
@@ -51,108 +75,168 @@
       padding: 10px;
       border: 2px solid var(--gris);
       border-radius: 8px;
+      margin-bottom: 12px;
       font-size: 16px;
-      box-sizing: border-box;
-      margin-top: 5px;
-      margin-bottom: 15px;
     }
 
-    button {
+    .btn {
       background-color: var(--morado);
       color: var(--blanco);
       border: none;
       padding: 10px 20px;
-      font-size: 16px;
       border-radius: 8px;
       cursor: pointer;
+      font-size: 16px;
       transition: background-color 0.3s;
+      margin-right: 10px;
+      margin-bottom: 12px;
+    }
+    .btn:hover {
+      background-color: #7e70e0;
     }
 
-    button:hover {
-      background-color: #7e70e0;
+    .export-btn {
+      background-color: var(--azul);
+    }
+    .export-btn:hover {
+      background-color: #36b9e8;
     }
 
     .result {
       margin-top: 20px;
-      padding: 15px;
-      border-radius: 10px;
+      padding: 12px;
+      border-radius: 8px;
       background-color: var(--gris);
       color: #333;
     }
+    .result.info { background-color: #d1ecf1; color: #0c5460; }
+    .result.success { background-color: #d4edda; color: #155724; }
+    .result.error { background-color: #f8d7da; color: #721c24; }
 
-    .success {
-      background-color: #d4edda;
-      color: #155724;
-    }
-
-    .error {
-      background-color: #f8d7da;
-      color: #721c24;
-    }
-
-    .info {
-      background-color: #d1ecf1;
-      color: #0c5460;
+    iframe {
+      width: 100%;
+      height: 600px;
+      border: none;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>Back‑Office: Gestión de Premios</h1>
+    <div class="header">Panel de Administración de Encuestas</div>
+    <div class="content">
+      
+      <!-- Panel Izquierdo: Búsqueda y Cobro + Export -->
+      <div class="left-panel">
+        <h2>Buscar Premio</h2>
+        <label for="phone">Teléfono del cliente:</label>
+        <input type="text" id="phone" placeholder="722xxxxxxx" maxlength="10" />
+        <button class="btn" onclick="buscar()">Buscar</button>
+        
+        <!-- Botones de exportación -->
+        <div>
+          <button class="btn export-btn" onclick="exportarCSV()">📥 Exportar CSV</button>
+          <button class="btn export-btn" onclick="exportarPDF()">📄 Exportar PDF</button>
+        </div>
 
-    <label for="phone">Teléfono del cliente:</label>
-    <input type="text" id="phone" placeholder="722xxxxxxx" maxlength="10" />
-    <button onclick="buscar()">Buscar Premio</button>
+        <div id="info" class="result"></div>
+      </div>
 
-    <div id="info" class="result"></div>
+      <!-- Panel Derecho: Dashboard de Google Looker Studio -->
+      <div class="right-panel">
+        <h2>Dashboard de NPS &amp; Premios</h2>
+        <!-- Reemplaza la URL por la de tu informe embebido -->
+        <iframe 
+          src="https://lookerstudio.google.com/embed/reporting/9f47120b-d8a5-4b41-809e-a5c8098a4e25/page/h96KF"
+          allowfullscreen>
+        </iframe>
+      </div>
+
+    </div>
   </div>
 
   <script>
-    const WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbxSwZxBdczPhk06FmyaAgBkSZeG-t7GXBcOgPqjAYOY1KRQsejcffUdTcOoZUq9RqTE/exec';
+    const WEBAPP_URL    = 'https://script.google.com/macros/s/AKfycbxSwZxBdczPhk06FmyaAgBkSZeG-t7GXBcOgPqjAYOY1KRQsejcffUdTcOoZUq9RqTE/exec';
+    const SPREADSHEET_ID = '1j-1cFo5AXgI_HtRoG-rb7qr8oCpSZgAEeXIfJMrxDpk';
+    const SHEET_GID      = 0; // GID de la pestaña “Hoja1”
 
     async function buscar() {
-      const tel = document.getElementById('phone').value.trim();
+      const tel  = document.getElementById('phone').value.trim();
       const info = document.getElementById('info');
-      info.innerHTML = '';
+      info.textContent = '';
       info.className = 'result';
 
       if (!tel) {
-        info.innerHTML = 'Ingresa un teléfono';
+        info.textContent = 'Ingresa un teléfono';
         info.classList.add('error');
         return;
       }
 
-      const resp = await fetch(`${WEBAPP_URL}?Accion=check_premio&telefono=${tel}`);
-      const j = await resp.json();
+      try {
+        const resp = await fetch(`${WEBAPP_URL}?Accion=check_premio&telefono=${tel}`);
+        const j    = await resp.json();
 
-      if (j.result === 'no_pending') {
-        info.innerHTML = 'No hay premio asignado o aún no ganó.';
-        info.classList.add('info');
-      } else if (j.result === 'ok') {
-        let html = `<p><strong>Premio:</strong> ${j.premio}</p>
-                    <p><strong>Fecha premio:</strong> ${j.fechaP}</p>`;
-        if (j.cobrado) {
-          html += `<p><strong style="color:green;">Ya cobrado el:</strong> ${j.cobrado}</p>`;
-        } else {
-          html += `<button onclick="cobrar(${j.row})">Marcar como cobrado</button>`;
+        if (j.result === 'no_pending') {
+          info.textContent = 'No hay premio asignado o aún no ganó.';
+          info.classList.add('info');
         }
-        info.innerHTML = html;
-        info.classList.add('success');
-      } else {
-        info.innerHTML = 'Error, intenta de nuevo.';
+        else if (j.result === 'ok') {
+          let html = `<p><strong>Premio:</strong> ${j.premio}</p>
+                      <p><strong>Fecha premio:</strong> ${j.fechaP}</p>`;
+          if (j.cobrado) {
+            html += `<p><strong>Ya cobrado el:</strong> ${j.cobrado}</p>`;
+          } else {
+            html += `<button class="btn" onclick="cobrar(${j.row})">Marcar como cobrado</button>`;
+          }
+          info.innerHTML = html;
+          info.classList.add('success');
+        }
+        else {
+          info.textContent = 'Error, intenta de nuevo.';
+          info.classList.add('error');
+        }
+      } catch (e) {
+        info.textContent = 'Error de conexión.';
         info.classList.add('error');
       }
     }
 
     async function cobrar(row) {
-      const resp = await fetch(`${WEBAPP_URL}?Accion=cobrar_premio&row=${row}`);
-      const j = await resp.json();
-      if (j.result === 'cobrado') {
-        alert('Premio marcado como cobrado.');
-        buscar(); // refresca el estado
-      } else {
-        alert('Error al marcar como cobrado.');
+      try {
+        const resp = await fetch(`${WEBAPP_URL}?Accion=cobrar_premio&row=${row}`);
+        const j    = await resp.json();
+        if (j.result === 'cobrado') {
+          alert('Premio marcado como cobrado.');
+          buscar();
+        } else {
+          alert('Error al marcar como cobrado.');
+        }
+      } catch {
+        alert('Error de conexión.');
       }
+    }
+
+    // Exportar CSV
+    function exportarCSV() {
+      const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/export?format=csv&gid=${SHEET_GID}`;
+      window.open(url, '_blank');
+    }
+    // Exportar PDF
+    function exportarPDF() {
+      const base   = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/export?`;
+      const params = [
+        'format=pdf',
+        'portrait=true',
+        'fitw=true',
+        'sheetnames=false',
+        'printtitle=false',
+        'pagenumbers=false',
+        'gridlines=false',
+        'fzr=false',
+        `gid=${SHEET_GID}`
+      ].join('&');
+      window.open(base + params, '_blank');
     }
   </script>
 </body>
